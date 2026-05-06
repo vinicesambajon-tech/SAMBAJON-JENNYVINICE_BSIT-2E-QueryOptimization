@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>IT223 · Database Design & Optimization | Modern Notes</title>
+    <!-- Google Fonts + Font Awesome 6 (free icons) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #eef2f9 0%, #e0e7f0 100%);
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1a2634;
+        }
+
+        /* main container - elegant frosted glass effect */
+        .glass-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(0px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* header section with modern waves */
+        .hero {
+            background: linear-gradient(135deg, #0f2b3d 0%, #1b4a6e 100%);
+            padding: 2rem 2.5rem;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero h1 i {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 60px;
+            font-size: 1.6rem;
+        }
+
+        .hero .sub {
+            font-size: 1rem;
+            margin-top: 0.65rem;
+            opacity: 0.85;
+            border-left: 3px solid #5dade2;
+            padding-left: 1rem;
+            font-weight: 400;
+        }
+
+        .badge-course {
+            background: #ffb347;
+            background: linear-gradient(120deg, #ffb347, #ff8c2e);
+            padding: 0.2rem 0.9rem;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #1e2a36;
+            display: inline-block;
+            margin-left: 1rem;
+            vertical-align: middle;
+        }
+
+        /* content wrapper */
+        .content-wrapper {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+
+        /* grid layout for questions - modern card grid */
+        .questions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* individual question card */
+        .question-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+            border: 1px solid #eef2f8;
+            overflow: hidden;
+        }
+
+        .question-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -12px rgba(0, 20, 40, 0.15);
+            border-color: #cbdde9;
+        }
+
+        /* card header */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            background: #fafcff;
+            padding: 1.2rem 1.8rem;
+            border-bottom: 2px solid #eef2fa;
+        }
+
+        .q-icon {
+            background: #1e3c72;
+            background: linear-gradient(135deg, #1e3c72, #2a558c);
+            width: 44px;
+            height: 44px;
+            border-radius: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 12px -6px rgba(0,32,64,0.2);
+        }
+
+        .card-header h3 {
+            font-size: 1.45rem;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            color: #0f2b3d;
+            margin: 0;
+        }
+
+        /* answer body */
+        .answer-body {
+            padding: 1.6rem 1.8rem 1.8rem 1.8rem;
+            background: #ffffff;
+        }
+
+        .answer-text {
+            font-size: 1rem;
+            line-height: 1.55;
+            color: #1f2e3a;
+        }
+
+        .answer-text p {
+            margin-bottom: 1rem;
+        }
+
+        .highlight-word {
+            background: #eef3fc;
+            color: #0059b3;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: inline-block;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .inline-code {
+            background: #eef2f9;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #c7254e;
+            color: #b13b5c;
+        }
+
+        .tip-badge {
+            background: #fff0db;
+            border-left: 4px solid #f5a623;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            margin: 1rem 0 0.5rem 0;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+        }
+
+        .tip-badge i {
+            color: #e68a2e;
+            font-size: 1.1rem;
+            margin-top: 2px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .bullet-list li {
+            margin-bottom: 0.65rem;
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+        }
+
+        .bullet-list li i {
+            width: 20px;
+            color: #2a6f8f;
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+        }
+
+        hr.divider-light {
+            margin: 0.5rem 0 1rem;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #e2e8f0, transparent);
+        }
+
+        .video-resources {
+            margin-top: 2.5rem;
+            background: #f8fafd;
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            border: 1px solid #e4edf5;
+        }
+
+        .video-links {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .video-link {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #1f5e8c;
+            border: 1px solid #cde1ed;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .video-link i {
+            font-size: 0.9rem;
+        }
+
+        .video-link:hover {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+            transform: translateY(-1px);
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #5c6f87;
+            border-top: 1px solid #eef2f0;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .hero {
+                padding: 1.5rem;
+            }
+            .content-wrapper {
+                padding: 1.5rem;
+            }
+            .card-header h3 {
+                font-size: 1.2rem;
+            }
+            .card-header {
+                padding: 1rem 1.2rem;
+            }
+            .answer-body {
+                padding: 1.2rem;
+            }
+        }
+
+        /* small extras */
+        .strong-accent {
+            color: #1d4e6e;
+            font-weight: 600;
+        }
+
+        .comparison {
+            background: #f9f9ff;
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="glass-container">
+    <div class="hero">
+        <h1>
+            <i class="fas fa-database"></i> 
+            Database Query Optimization
+            <span class="badge-course">IT223 · Advanced SQL</span>
+        </h1>
+        <div class="sub">
+            <i class="fas fa-lightbulb" style="margin-right: 6px;"></i> 
+            Simple, practical answers based on hands-on video lessons — for faster, smarter databases.
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="questions-grid">
+            
+            <!-- QUESTION 1 - CHAR vs VARCHAR -->
+            <div class="question-card">
+                <div class="card-header">
+                    <div class="q-icon"><i class="fas fa-text-width"></i></div>
+                    <h3>📦 CHAR vs VARCHAR — what's the difference?</h3>
+                </div>
+                <div class="answer-body">
+                    <div class="answer-text">
+                        <p><span class="highlight-word"><i class="fas fa-parking"></i> CHAR</span> = <strong>fixed parking spot</strong>. Even a tiny car ("Hi") occupies the whole spot. <code class="inline-code">CHAR(10)</code> always reserves <strong>10 bytes</strong>. Perfect for fixed-length data: phone numbers, zip codes, ISO country codes, Y/N flags.</p>
+                        <p><span class="highlight-word"><i class="fas fa-valet"></i> VARCHAR</span> = <strong>valet parking</strong> — you pay only for the exact space your car needs. <code class="inline-code">VARCHAR(10)</code> storing "Hi" uses only 2 bytes + overhead. Ideal for names, emails, descriptions, variable text.</p>
+                        <div class="tip-badge">
+                            <i class="fas fa-chalkboard-user"></i>
+                            <span><strong>🎯 Tip from video:</strong> Use VARCHAR for almost everything unless the length is <strong>exactly identical</strong> every row. Saves storage = faster I/O, better cache efficiency. CHAR can be useful for fixed codes like MD5 hashes or session tokens.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 2 - INTEGER vs NUMERIC -->
+            <div class="question-card">
+                <div class="card-header">
+                    <div class="q-icon"><i class="fas fa-calculator"></i></div>
+                    <h3>🔢 INTEGER vs NUMERIC — when to choose?</h3>
+                </div>
+                <div class="answer-body">
+                    <div class="answer-text">
+                        <p><span class="highlight-word"><i class="fas fa-hashtag"></i> INTEGER</span> → <strong>whole numbers only</strong>. Use for: age, product quantity, students count, auto-increment IDs. Why? Integers are <strong>blazing fast</strong> — CPUs love them, indexes stay lean.</p>
+                        <p><span class="highlight-word"><i class="fas fa-coins"></i> NUMERIC / DECIMAL</span> → <strong>exact decimal math</strong>. Use for: money (PHP, USD, EUR), percentages, precise measurements. <strong>Never use FLOAT for currency</strong> — rounding errors can break financial logic!</p>
+                        <div class="tip-badge">
+                            <i class="fas fa-gauge-high"></i>
+                            <span><strong>⚡ Performance rule:</strong> If you don’t need decimals, pick INTEGER. It’s like a sports car vs a heavy truck — leaner storage = quicker aggregations and joins.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 3 - UNION vs UNION ALL -->
+            <div class="question-card">
+                <div class="card-header">
+                    <div class="q-icon"><i class="fas fa-layer-group"></i></div>
+                    <h3>🔗 UNION vs UNION ALL — key difference?</h3>
+                </div>
+                <div class="answer-body">
+                    <div class="answer-text">
+                        <p><span class="highlight-word">UNION</span> → merges two result sets and <strong>removes duplicate rows</strong>. It performs an implicit sort / distinct operation — like checking every ID card in a crowd. Useful when duplicates would mislead analysis.</p>
+                        <p><span class="highlight-word">UNION ALL</span> → just stacks results, keeping <strong>all rows including duplicates</strong>. No duplicate elimination overhead → much faster, especially on large tables.</p>
+                        <div class="tip-badge">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span><strong>🚀 Optimization secret:</strong> Prefer <strong>UNION ALL</strong> unless you critically need to remove duplicates. UNION can be 2-3x slower because of the sorting + deduplication step. Don’t waste CPU cycles on unnecessary distinct checks.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 4 - DISTINCT, LIMIT, != and <> powers + caution -->
+            <div class="question-card">
+                <div class="card-header">
+                    <div class="q-icon"><i class="fas fa-filter"></i></div>
+                    <h3>⚙️ DISTINCT, LIMIT, != , &lt;&gt; — what's good about them?</h3>
+                </div>
+                <div class="answer-body">
+                    <div class="answer-text">
+                        <ul class="bullet-list">
+                            <li><i class="fas fa-clone"></i> <strong>DISTINCT</strong> – removes duplicate rows. Great for "unique cities list", but <strong>caution:</strong> can be heavy on wide tables; it forces sorting or hashing.</li>
+                            <li><i class="fas fa-stopwatch"></i> <strong>LIMIT</strong> – returns only first N rows. <strong>Life saver for performance</strong> — prevents scanning millions of rows if you need only previews. Always use during development/testing.</li>
+                            <li><i class="fas fa-not-equal"></i> <strong>!=</strong> – "not equal to". Example: <code class="inline-code">WHERE price != 0</code>. Handy for exclusion filters.</li>
+                            <li><i class="fas fa-code-branch"></i> <strong>&lt;&gt;</strong> – exactly the same as !=. Some SQL flavors prefer <code>&lt;&gt;</code> (standard SQL), others accept both. Identical meaning: “not equal”.</li>
+                        </ul>
+                        <div class="tip-badge">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>⚠️ Critical insight:</strong> LIMIT is your best friend for speed — always consider pagination. But watch out: <strong>!= and &lt;&gt;</strong> often break index usage, leading to full table scans. Avoid them on huge tables if possible; use positive filters (e.g., <code>status = 'active'</code> instead of <code>status != 'archived'</code>) when you can.</span>
+                        </div>
+                        <hr class="divider-light">
+                        <p style="font-size: 0.9rem; margin-top: 6px;"><i class="fas fa-database"></i> <strong>Pro tip:</strong> Combine LIMIT with ORDER BY to get predictable, lightning-fast result slices.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- video references + credibility -->
+        <div class="video-resources">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fab fa-youtube" style="font-size: 1.8rem; color: #c4302b;"></i>
+                <span style="font-weight: 500;">🎥 Based on MySQL query optimization deep-dives</span>
+            </div>
+            <div class="video-links">
+                <a href="https://www.youtube.com/watch?v=LC84a9f5_vA" target="_blank" class="video-link" rel="noopener">
+                    <i class="fas fa-play-circle"></i> Video 1 · Indexing & Types
+                </a>
+                <a href="https://www.youtube.com/watch?v=cYnT_-jy_Y8" target="_blank" class="video-link" rel="noopener">
+                    <i class="fas fa-play-circle"></i> Video 2 · UNION vs UNION ALL deep dive
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <i class="fas fa-graduation-cap"></i> IT223 — Database Design & Optimization · Concepts distilled from real tuning sessions <br>
+            <span style="font-size: 0.7rem;">⚡ faster queries, smarter schema decisions</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html> 
